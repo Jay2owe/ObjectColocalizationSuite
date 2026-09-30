@@ -1,0 +1,12 @@
+Image,Method,Not Swept,Source Channel,Target Channel,Threshold Name,Threshold Unit,Steps,Ladder From,Ladder To,Flip Fraction
+aniso A,cpc,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+aniso A,volume-overlap,0.0,A,B,Overlap,%,21.0,10.0,50.0,0.75
+aniso A,volume-overlap,0.0,B,A,Overlap,%,21.0,10.0,50.0,0.625
+aniso A,bounding-box,0.0,A,B,Bounding-box overlap,%,21.0,10.0,50.0,0.875
+aniso A,bounding-box,0.0,B,A,Bounding-box overlap,%,21.0,10.0,50.0,0.625
+aniso A,containment,0.0,A,B,Containment,%,21.0,78.0,100.0,0.0
+aniso A,containment,0.0,B,A,Containment,%,21.0,78.0,100.0,0.0
+aniso A,jaccard-dice,0.0,A,B,Jaccard index,,21.0,0.3,0.7,0.375
+aniso A,jaccard-dice,0.0,B,A,Jaccard index,,21.0,0.3,0.7,0.375
+aniso A,distance-tolerance,0.0,A,B,Centroid distance,calibrated units,21.0,3.0,7.0,0.0
+aniso A,distance-tolerance,0.0,B,A,Centroid distance,calibrated units,21.0,3.0,7.0,0.0

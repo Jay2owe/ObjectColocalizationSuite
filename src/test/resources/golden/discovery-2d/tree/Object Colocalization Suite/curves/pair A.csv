@@ -1,0 +1,9 @@
+Image,Method,Source Channel,Target Channel,Status,Radii,Global p,Minimum Achievable p,Max Deviation,Max Deviation Radius,Simulations,Seed,Rank Sample Count,Envelope Complete,Source Points,Target Points,Envelope Level,Saturation Radius,Saturated Radii
+pair A,cross-g,A,B,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,0.457,1.725,99,20260811,100,1,12,10,0.040,17.612,0
+pair A,cross-g,B,A,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,0.548,1.725,99,20260811,100,1,10,12,0.040,16.077,0
+pair A,cross-k,A,B,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,100.806,1.725,99,20260811,100,1,12,10,0.040,NaN,0
+pair A,cross-k,B,A,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,100.806,1.725,99,20260811,100,1,10,12,0.040,NaN,0
+pair A,cross-l,A,B,NON_RECTANGULAR_DOMAIN,20,0.090,0.010,4.196,1.725,99,20260811,100,1,12,10,0.040,NaN,0
+pair A,cross-l,B,A,NON_RECTANGULAR_DOMAIN,20,0.110,0.010,4.196,1.725,99,20260811,100,1,10,12,0.040,NaN,0
+pair A,cross-pair-correlation,A,B,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,16.739,1.725,99,20260811,100,1,12,10,0.040,NaN,0
+pair A,cross-pair-correlation,B,A,NON_RECTANGULAR_DOMAIN,20,0.020,0.010,16.739,1.725,99,20260811,100,1,10,12,0.040,NaN,0

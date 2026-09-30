@@ -1,0 +1,43 @@
+{
+  "plugin": "Object Colocalization Suite",
+  "image": "golden A",
+  "channels": ["A", "B", "C"],
+  "methods": ["cpc", "volume-overlap", "bounding-box", "containment", "jaccard-dice", "distance-tolerance", "per-object-intensity", "whole-image-intensity", "cross-g", "cross-k", "cross-l", "cross-pair-correlation", "territory-occupancy"],
+  "thresholds": {},
+  "skipped": [],
+  "bidirectional": true,
+  "nullModel": true,
+  "permutations": 49,
+  "seed": 20260812,
+  "seedContractVersion": 1,
+  "agreement": true,
+  "thresholdSweep": true,
+  "discovery": true,
+  "alpha": 0.05,
+  "flipThreshold": 0.1,
+  "minCompareN": 30,
+  "kappaLimit": 0.4,
+  "regionRoi": "1 ROI(s)",
+  "nullModelKind": "whole-channel",
+  "sweepWidth": 0.2,
+  "chanceTest": {
+    "kind": "whole-channel",
+    "hypothesis": "the two channels meet no more and no less often than they would if each kept its own internal arrangement but its position relative to the other were random",
+    "shuffles": 49,
+    "seed": 20260812,
+    "seedContractVersion": 1,
+    "nominalPFloor": 0.04,
+    "pValues": "raw, two-sided; alpha is per test",
+    "crossFieldInflation": 1.45,
+    "noPValue": ["bounding-box"]
+  },
+  "caveats": [
+    "Chance test: whole-channel null (the whole channel slid by one offset, wrapping at the frame edges). It tests whether the two channels meet no more and no less often than they would if each kept its own internal arrangement but its position relative to the other were random. 49 shuffles, seed 20260812, seed contract version 1.",
+    "The smallest two-sided p this run can report is min(1, 2/(49+1)) = 0.04; ties can raise it. p values are raw and two-sided; alpha (0.05) is per test, with no correction for multiple comparisons.",
+    "Under the whole-channel null, independent real channels gave p < 0.05 about 1.45 times as often as expected (0.029 against 0.020, alpha validation 2026-08-30), so read p values near alpha with that inflation in mind.",
+    "bounding-box has no p under the whole-channel null: wrapping at the frame edge can turn an object's box into the whole frame. Its measured values are still reported.",
+    "jaccard-dice: its coincident count ties almost everywhere on real data, so its p rarely falls below 0.05 even when there is an effect (about 0.0007 by chance in validation). A non-significant jaccard-dice result is weak evidence of no effect.",
+    "The spatial methods (cross-G, cross-K, cross-L, pair correlation) are planar: each object contributes only its xy centroid, so two objects at the same xy on different slices count as coincident."
+  ],
+  "version": "<normalised>"
+}

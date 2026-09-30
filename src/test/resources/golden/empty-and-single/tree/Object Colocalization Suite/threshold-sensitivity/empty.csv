@@ -1,0 +1,37 @@
+Image,Method,Not Swept,Source Channel,Target Channel,Threshold Name,Threshold Unit,Steps,Ladder From,Ladder To,Flip Fraction
+empty,cpc,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0
+empty,volume-overlap,0,Empty,Single,Overlap,%,21,10.000,50.000,NaN
+empty,volume-overlap,0,Single,Empty,Overlap,%,21,10.000,50.000,0
+empty,volume-overlap,0,Empty,Some,Overlap,%,21,10.000,50.000,NaN
+empty,volume-overlap,0,Some,Empty,Overlap,%,21,10.000,50.000,0
+empty,volume-overlap,0,Single,Some,Overlap,%,21,10.000,50.000,0
+empty,volume-overlap,0,Some,Single,Overlap,%,21,10.000,50.000,0
+empty,bounding-box,0,Empty,Single,Bounding-box overlap,%,21,10.000,50.000,NaN
+empty,bounding-box,0,Single,Empty,Bounding-box overlap,%,21,10.000,50.000,0
+empty,bounding-box,0,Empty,Some,Bounding-box overlap,%,21,10.000,50.000,NaN
+empty,bounding-box,0,Some,Empty,Bounding-box overlap,%,21,10.000,50.000,0
+empty,bounding-box,0,Single,Some,Bounding-box overlap,%,21,10.000,50.000,0
+empty,bounding-box,0,Some,Single,Bounding-box overlap,%,21,10.000,50.000,0
+empty,containment,0,Empty,Single,Containment,%,21,78.000,100.000,NaN
+empty,containment,0,Single,Empty,Containment,%,21,78.000,100.000,0
+empty,containment,0,Empty,Some,Containment,%,21,78.000,100.000,NaN
+empty,containment,0,Some,Empty,Containment,%,21,78.000,100.000,0
+empty,containment,0,Single,Some,Containment,%,21,78.000,100.000,0
+empty,containment,0,Some,Single,Containment,%,21,78.000,100.000,0
+empty,jaccard-dice,0,Empty,Single,Jaccard index,,21,0.300,0.700,NaN
+empty,jaccard-dice,0,Single,Empty,Jaccard index,,21,0.300,0.700,0
+empty,jaccard-dice,0,Empty,Some,Jaccard index,,21,0.300,0.700,NaN
+empty,jaccard-dice,0,Some,Empty,Jaccard index,,21,0.300,0.700,0
+empty,jaccard-dice,0,Single,Some,Jaccard index,,21,0.300,0.700,1
+empty,jaccard-dice,0,Some,Single,Jaccard index,,21,0.300,0.700,0.333
+empty,distance-tolerance,0,Empty,Single,Centroid distance,calibrated units,21,3.000,7.000,NaN
+empty,distance-tolerance,0,Empty,Some,Centroid distance,calibrated units,21,3.000,7.000,NaN
+empty,distance-tolerance,0,Single,Empty,Centroid distance,calibrated units,21,3.000,7.000,0
+empty,distance-tolerance,0,Single,Some,Centroid distance,calibrated units,21,3.000,7.000,0
+empty,distance-tolerance,0,Some,Empty,Centroid distance,calibrated units,21,3.000,7.000,0
+empty,distance-tolerance,0,Some,Single,Centroid distance,calibrated units,21,3.000,7.000,0
+empty,cross-g,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0
+empty,cross-k,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0
+empty,cross-l,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0
+empty,cross-pair-correlation,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0
+empty,territory-occupancy,"no threshold to sweep — the measure is not a cut-off, so its answer cannot depend on where one was drawn",0,0,0,0,0,0.000,0.000,0

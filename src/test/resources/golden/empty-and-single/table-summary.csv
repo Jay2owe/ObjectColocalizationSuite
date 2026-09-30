@@ -1,0 +1,7 @@
+Image,Source Channel,Target Channel,n Objects,cpc % Coincident,cpc Mean,cpc SD,volume-overlap % Coincident,volume-overlap Mean,volume-overlap SD,bounding-box % Coincident,bounding-box Mean,bounding-box SD,containment % Coincident,containment Mean,containment SD,jaccard-dice % Coincident,jaccard-dice Mean,jaccard-dice SD,distance-tolerance % Coincident,distance-tolerance Mean,distance-tolerance SD,territory-occupancy % Coincident,territory-occupancy Mean,territory-occupancy SD
+empty,Empty,Single,0.0,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN
+empty,Single,Empty,1.0,0.0,0.0,NaN,0.0,0.0,NaN,0.0,0.0,NaN,0.0,0.0,NaN,0.0,0.0,NaN,0.0,NaN,NaN,0.0,NaN,NaN
+empty,Empty,Some,0.0,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN,NaN
+empty,Some,Empty,3.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,NaN,NaN,0.0,NaN,NaN
+empty,Single,Some,1.0,100.0,1.0,NaN,100.0,56.25,NaN,100.0,56.25,NaN,100.0,1.0,NaN,100.0,0.5625,NaN,100.0,0.7071067811865476,NaN,0.0,1.0,NaN
+empty,Some,Single,3.0,33.333333333333336,0.3333333333333333,0.5773502691896258,33.333333333333336,33.333333333333336,57.735026918962575,33.333333333333336,33.333333333333336,57.735026918962575,33.333333333333336,0.3333333333333333,0.5773502691896258,33.333333333333336,0.1875,0.3247595264191645,33.333333333333336,8.511804404174422,6.769326308992305,33.333333333333336,0.650909090909091,1.1274076165630147

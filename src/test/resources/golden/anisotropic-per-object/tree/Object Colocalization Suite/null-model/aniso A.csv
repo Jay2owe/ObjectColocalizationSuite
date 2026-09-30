@@ -1,0 +1,13 @@
+Image,Method,Source Channel,Target Channel,Observed,Expected,Enrichment,p,p Depletion,p Two-sided,Permutations,Seed,Randomization Skipped
+aniso A,cpc,A,B,4,0.245,16.333,0.020,1,0.040,49,20260812,
+aniso A,cpc,B,A,3,0.327,9.188,0.020,1,0.040,49,20260812,
+aniso A,volume-overlap,A,B,3,0.306,9.800,0.020,1,0.040,49,20260812,
+aniso A,volume-overlap,B,A,6,0.388,15.474,0.020,1,0.040,49,20260812,
+aniso A,bounding-box,A,B,3,0.286,10.500,0.020,1,0.040,49,20260812,
+aniso A,bounding-box,B,A,6,0.408,14.700,0.020,1,0.040,49,20260812,
+aniso A,containment,A,B,1,0.061,16.333,0.080,1,0.160,49,20260812,
+aniso A,containment,B,A,1,0.061,16.333,0.080,1,0.160,49,20260812,
+aniso A,jaccard-dice,A,B,1,0.061,16.333,0.080,1,0.160,49,20260812,
+aniso A,jaccard-dice,B,A,1,0.061,16.333,0.080,1,0.160,49,20260812,
+aniso A,distance-tolerance,A,B,8,7.980,1.003,0.980,1,1.000,49,20260812,
+aniso A,distance-tolerance,B,A,8,7.980,1.003,0.980,1,1.000,49,20260812,

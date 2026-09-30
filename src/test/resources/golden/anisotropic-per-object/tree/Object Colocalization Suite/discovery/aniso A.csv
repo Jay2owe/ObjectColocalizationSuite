@@ -1,0 +1,13 @@
+Image,Method,Source Channel,Target Channel,Class,Meaning,Evidence,Disagrees With
+aniso A,cpc,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 4 objects, below the minimum of 30 needed to judge",
+aniso A,cpc,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 3 objects, below the minimum of 30 needed to judge",
+aniso A,volume-overlap,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 3 objects, below the minimum of 30 needed to judge",
+aniso A,volume-overlap,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 6 objects, below the minimum of 30 needed to judge",
+aniso A,bounding-box,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 3 objects, below the minimum of 30 needed to judge",
+aniso A,bounding-box,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 6 objects, below the minimum of 30 needed to judge",
+aniso A,containment,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 1 objects, below the minimum of 30 needed to judge",
+aniso A,containment,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 1 objects, below the minimum of 30 needed to judge",
+aniso A,jaccard-dice,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 1 objects, below the minimum of 30 needed to judge",
+aniso A,jaccard-dice,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 1 objects, below the minimum of 30 needed to judge",
+aniso A,distance-tolerance,A,B,Not applicable,"required inputs absent, or too few objects to judge","only 8 objects, below the minimum of 30 needed to judge",
+aniso A,distance-tolerance,B,A,Not applicable,"required inputs absent, or too few objects to judge","only 8 objects, below the minimum of 30 needed to judge",

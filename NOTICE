@@ -1,0 +1,32 @@
+Object Colocalization Suite
+Copyright (c) 2026 Jamie Malcolm
+
+Developed at the Brancaccio Lab, UK Dementia Research Institute,
+Imperial College London.
+
+Licensed under the BSD 3-Clause License. See LICENSE.
+
+
+Embedded components
+-------------------
+
+The plugin jar bundles the following libraries, relocated under
+ocs.internal.* so they cannot clash with the same libraries installed
+separately in Fiji (for example by the sibling plugins).
+
+Measurement cores, Copyright (c) 2026 Jamie Malcolm, BSD 3-Clause License:
+
+  io.github.jay2owe:cpc-core 0.2.0         centroid coincidence
+  io.github.jay2owe:volcoloc-core 0.1.0    volumetric and bounding-box overlap
+  io.github.jay2owe:opa-core 0.4.0         cross-type spatial statistics
+  io.github.jay2owe:territories-core 0.2.1 Voronoi territories
+  io.github.jay2owe:oc3d-core 0.2.0        3D object measurement and UI helpers
+
+JTS Topology Suite (org.locationtech.jts:jts-core 1.19.0)
+  Dual-licensed under the Eclipse Public License 2.0 and the Eclipse
+  Distribution License 1.0. This plugin takes JTS under the EDL 1.0,
+  which is the BSD 3-Clause licence in substance, and so redistributes
+  under BSD-3-Clause with the JTS notice retained. The notice travels in
+  the jar at META-INF/licenses/JTS-LICENSE.txt.
+
+ImageJ (net.imagej:ij) is not bundled; Fiji provides it at run time.

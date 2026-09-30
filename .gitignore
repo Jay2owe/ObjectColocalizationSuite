@@ -1,0 +1,19 @@
+# Build output
+target/
+dependency-reduced-pom.xml
+*.class
+
+# Scratch
+tmp/
+
+# Agent context - never tracked
+.claude/
+.codex/
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+
+# IDE
+.idea/
+*.iml
+.vscode/

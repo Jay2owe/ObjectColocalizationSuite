@@ -1,0 +1,99 @@
+cff-version: 1.2.0
+message: "If you use this plugin, please cite it as below, together with the sibling plugin whose measure you report."
+type: software
+title: "Object Colocalization Suite"
+abstract: >-
+  Fiji/ImageJ plugin that runs thirteen colocalization methods (object
+  overlap, centroid coincidence and distance, per-object and whole-image
+  intensity correlation, cross-type spatial statistics and Voronoi territory
+  occupancy) over the same 2 to 5 label images, reports every method per
+  object in one table, tests each against a shuffled-object chance model,
+  compares the methods with each other, and classifies which are informative
+  on the data at hand. Runs from a dialog, from macros, headless, from Java
+  and as folder batches.
+authors:
+  - given-names: Jamie
+    family-names: Malcolm
+    orcid: "https://orcid.org/0009-0008-3862-2776"
+    affiliation: "UK Dementia Research Institute at Imperial College London"
+    email: jamiemalcolm12@gmail.com
+repository-code: "https://github.com/Jay2owe/ObjectColocalizationSuite"
+url: "https://github.com/Jay2owe/ObjectColocalizationSuite"
+license: BSD-3-Clause
+version: "0.1.0"
+keywords:
+  - imagej
+  - fiji
+  - image-analysis
+  - microscopy
+  - colocalization
+  - object-based-colocalization
+  - permutation-test
+  - method-comparison
+  - 3d
+references:
+  - type: software
+    title: "CPC — Centre-Particle Coincidence"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "1.5.0"
+    doi: "10.5281/zenodo.21633355"
+    repository-code: "https://github.com/Jay2owe/CPC"
+  - type: software
+    title: "Volumetric Colocalization"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.1.0"
+    doi: "10.5281/zenodo.21933258"
+    repository-code: "https://github.com/Jay2owe/VolumetricColocalization"
+  - type: software
+    title: "Object Proximity Analysis"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.4.1"
+    repository-code: "https://github.com/Jay2owe/ObjectProximityAnalysis"
+  - type: software
+    title: "Object Territories"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.3.1"
+    repository-code: "https://github.com/Jay2owe/ObjectTerritories"
+  - type: software
+    title: "cpc-core: Embeddable centroid-in-object coincidence engine"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.2.0"
+    repository-code: "https://github.com/Jay2owe/cpc-core"
+  - type: software
+    title: "volcoloc-core: Embeddable directional volume-overlap engine"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.1.0"
+    repository-code: "https://github.com/Jay2owe/volcoloc-core"
+  - type: software
+    title: "opa-core: Embeddable object proximity and spatial point-pattern engine"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.4.0"
+    repository-code: "https://github.com/Jay2owe/opa-core"
+  - type: software
+    title: "territories-core: Embeddable spatial territory and density engine"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.2.1"
+    repository-code: "https://github.com/Jay2owe/territories-core"
+  - type: software
+    title: "oc3d-core: Shared engine for the 3D Objects Counter plugin family"
+    authors:
+      - given-names: Jamie
+        family-names: Malcolm
+    version: "0.2.0"
+    repository-code: "https://github.com/Jay2owe/oc3d-core"

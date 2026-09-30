@@ -1,0 +1,116 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+# Five cores are compiled into the plugin jar, not installed beside it in Fiji.
+# They are not published to any Maven repository, so a clean runner builds them
+# from source first. Keep each immutable tag aligned with the matching core
+# <version> in pom.xml. cpc-core depends on oc3d-core, so oc3d-core installs
+# first.
+env:
+  OC3D_CORE_REF: v0.2.0
+  CPC_CORE_REF: v0.2.0
+  VOLCOLOC_CORE_REF: v0.1.0
+  OPA_CORE_REF: v0.4.0
+  TERRITORIES_CORE_REF: v0.2.1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Object Colocalization Suite
+        uses: actions/checkout@v4
+        with:
+          path: plugin
+
+      - name: Check out oc3d-core
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/oc3d-core
+          ref: ${{ env.OC3D_CORE_REF }}
+          path: oc3d-core
+
+      - name: Check out cpc-core
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/cpc-core
+          ref: ${{ env.CPC_CORE_REF }}
+          path: cpc-core
+
+      - name: Check out volcoloc-core
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/volcoloc-core
+          ref: ${{ env.VOLCOLOC_CORE_REF }}
+          path: volcoloc-core
+
+      - name: Check out opa-core
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/opa-core
+          ref: ${{ env.OPA_CORE_REF }}
+          path: opa-core
+
+      - name: Check out territories-core
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/territories-core
+          ref: ${{ env.TERRITORIES_CORE_REF }}
+          path: territories-core
+
+      # Java 21 builds it; the bytecode target stays at 8, set by pom-scijava.
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # The cores' own suites are skipped here: each core runs them in its own
+      # CI at the tag, and this job is about the plugin.
+      - name: Install the cores
+        run: |
+          for core in oc3d-core cpc-core volcoloc-core opa-core territories-core; do
+            mvn --batch-mode --no-transfer-progress -f "$core/pom.xml" -DskipTests clean install
+          done
+
+      # The ui tests construct Swing components, so they need a display.
+      - name: Build and verify the plugin
+        working-directory: plugin
+        run: xvfb-run -a ./mvnw --batch-mode --no-transfer-progress clean verify
+
+      # Guards the shading, which is what makes the one-jar install work. A
+      # regression here is silent: the jar still builds and still runs on a
+      # developer machine, and only breaks for users whose Fiji has a sibling
+      # plugin carrying the same classes.
+      - name: Check the shaded jar
+        id: jar
+        working-directory: plugin
+        run: |
+          JAR=$(ls target/Object_Colocalization_Suite-*.jar \
+                | grep -v -e '-sources\.jar$' -e '-tests\.jar$' -e '/original-')
+          echo "Checking $JAR"
+          if unzip -Z1 "$JAR" | grep -E '^(sc/fiji/|org/locationtech/|ij/)'; then
+            echo "FAIL: unrelocated core, JTS or ImageJ classes in the jar"
+            exit 1
+          fi
+          for entry in Object_Colocalization_Suite.class OCS_Batch.class plugins.config; do
+            unzip -Z1 "$JAR" | grep -qx "$entry" \
+              || { echo "FAIL: $entry missing"; exit 1; }
+          done
+          if unzip -p "$JAR" META-INF/MANIFEST.MF | grep -q '^Class-Path:'; then
+            echo "FAIL: shaded cores must not appear as external class-path jars"
+            exit 1
+          fi
+          echo "OK: $(unzip -Z1 "$JAR" | grep -c '^ocs/internal/') relocated internal entries"
+          echo "path=plugin/$JAR" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$JAR" .jar)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload plugin jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.jar.outputs.name }}
+          path: ${{ steps.jar.outputs.path }}
+          if-no-files-found: error

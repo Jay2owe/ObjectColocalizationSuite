@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.scijava</groupId>
+		<artifactId>pom-scijava</artifactId>
+		<version>43.0.0</version>
+		<relativePath/>
+	</parent>
+
+	<groupId>io.github.jay2owe</groupId>
+	<artifactId>Object_Colocalization_Suite</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+
+	<name>Object Colocalization Suite</name>
+	<description>Fiji plugin that runs thirteen colocalization methods (object overlap, intensity correlation, spatial statistics, territories) per object over the same label images, tests each against chance, compares them and classifies which are informative on the data.</description>
+	<url>https://github.com/Jay2owe/ObjectColocalizationSuite</url>
+	<inceptionYear>2026</inceptionYear>
+
+	<organization>
+		<name>UK Dementia Research Institute at Imperial College London</name>
+		<url>https://ukdri.ac.uk/centres/imperial</url>
+	</organization>
+	<licenses>
+		<license>
+			<name>BSD 3-Clause License</name>
+			<url>https://opensource.org/licenses/BSD-3-Clause</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>Jay2owe</id>
+			<name>Jamie Malcolm</name>
+			<email>jamiemalcolm12@gmail.com</email>
+			<url>https://github.com/Jay2owe</url>
+			<organization>UK Dementia Research Institute at Imperial College London</organization>
+			<organizationUrl>https://www.ukdri.ac.uk/labs/brancaccio-lab</organizationUrl>
+			<properties>
+				<orcid>0009-0008-3862-2776</orcid>
+			</properties>
+			<roles>
+				<role>founder</role>
+				<role>lead</role>
+				<role>developer</role>
+				<role>maintainer</role>
+			</roles>
+		</developer>
+	</developers>
+	<contributors>
+		<contributor>
+			<name>Jamie Malcolm</name>
+			<url>https://github.com/Jay2owe</url>
+			<properties><id>Jay2owe</id></properties>
+		</contributor>
+	</contributors>
+	<mailingLists>
+		<mailingList>
+			<name>Image.sc Forum</name>
+			<archive>https://forum.image.sc/tag/imagej</archive>
+		</mailingList>
+	</mailingLists>
+
+	<scm>
+		<connection>scm:git:https://github.com/Jay2owe/ObjectColocalizationSuite</connection>
+		<developerConnection>scm:git:git@github.com:Jay2owe/ObjectColocalizationSuite</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/Jay2owe/ObjectColocalizationSuite</url>
+	</scm>
+	<issueManagement>
+		<system>GitHub Issues</system>
+		<url>https://github.com/Jay2owe/ObjectColocalizationSuite/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>GitHub Actions</system>
+		<url>https://github.com/Jay2owe/ObjectColocalizationSuite/actions</url>
+	</ciManagement>
+
+	<properties>
+		<package-name>ocs</package-name>
+		<license.licenseName>bsd_3</license.licenseName>
+		<license.copyrightOwners>Jamie Malcolm</license.copyrightOwners>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>scijava.public</id>
+			<url>https://maven.scijava.org/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.imagej</groupId>
+			<artifactId>ij</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!--
+		  Engine cores. Shaded into this jar, relocated, never installed by the
+		  user as separate artifacts — see the shade plugin below.
+
+		  Compile scope but NOT `provided`: the class files must end up inside
+		  the shipped jar. A bare Fiji has never heard of these cores and the
+		  whole point of the pattern is that it never has to.
+		-->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>cpc-core</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>volcoloc-core</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>opa-core</artifactId>
+			<version>0.4.0</version>
+		</dependency>
+		<!--
+		  Brings org.locationtech.jts:jts-core transitively at compile scope —
+		  the 2D Voronoi path is exact polygon overlay, which is what JTS is.
+		  JTS is therefore shaded and relocated here too; see the shade config.
+		-->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>territories-core</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+
+		<!-- Shared chassis: ROI/label ingest, CSV, batch discovery, dialog widgets. -->
+		<dependency>
+			<groupId>io.github.jay2owe</groupId>
+			<artifactId>oc3d-core</artifactId>
+			<version>0.2.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<!-- All cores are shaded; users install this jar alone. -->
+							<addClasspath>false</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<!--
+			  Shade every core into this jar, relocated.
+
+			  Relocation is not optional. CPC ships its own copy of cpc-core and
+			  Volumetric Colocalization ships its own copy of volcoloc-core; all
+			  three jars can sit in the same Fiji at once. Under Fiji's flat
+			  classloader, two jars carrying the same fully-qualified class name
+			  is a silent-wrong-answer bug, not a crash.
+
+			  artifactSet is an explicit allow-list. net.imagej:ij must never be
+			  bundled: it is what Fiji already is.
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>true</createDependencyReducedPom>
+							<artifactSet>
+								<includes>
+									<include>io.github.jay2owe:cpc-core</include>
+									<include>io.github.jay2owe:volcoloc-core</include>
+									<include>io.github.jay2owe:opa-core</include>
+									<include>io.github.jay2owe:territories-core</include>
+									<include>io.github.jay2owe:oc3d-core</include>
+									<include>org.locationtech.jts:jts-core</include>
+								</includes>
+							</artifactSet>
+							<relocations>
+								<relocation>
+									<pattern>sc.fiji.cpc.core</pattern>
+									<shadedPattern>ocs.internal.cpc</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>sc.fiji.volcoloc.core</pattern>
+									<shadedPattern>ocs.internal.volcoloc</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>sc.fiji.opa.core</pattern>
+									<shadedPattern>ocs.internal.opa</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>sc.fiji.territories.core</pattern>
+									<shadedPattern>ocs.internal.territories</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>sc.fiji.oc3d.core</pattern>
+									<shadedPattern>ocs.internal.core</shadedPattern>
+								</relocation>
+								<!--
+								  Third-party, so the reason differs from the
+								  cores': Fiji ships its own JTS on some update
+								  sites, and Object Territories ships a relocated
+								  copy of its own. Three unrelocated copies of
+								  org.locationtech.jts in one flat classloader is
+								  the same silent-wrong-answer bug.
+								-->
+								<relocation>
+									<pattern>org.locationtech.jts</pattern>
+									<shadedPattern>ocs.internal.shaded.jts</shadedPattern>
+								</relocation>
+							</relocations>
+							<filters>
+								<filter>
+									<artifact>io.github.jay2owe:cpc-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>io.github.jay2owe:volcoloc-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>io.github.jay2owe:opa-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<!--
+								  No META-INF/licenses exclude here. territories-core
+								  carries the JTS EPL-2.0/EDL-1.0 notice and it must
+								  travel with the relocated classes.
+								-->
+								<filter>
+									<artifact>io.github.jay2owe:territories-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>org.locationtech.jts:jts-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+								<filter>
+									<artifact>io.github.jay2owe:oc3d-core</artifact>
+									<excludes>
+										<exclude>META-INF/MANIFEST.MF</exclude>
+										<exclude>META-INF/maven/**</exclude>
+									</excludes>
+								</filter>
+							</filters>
+							<!--
+							  Carry only the core classes this plugin actually
+							  reaches. minimizeJar drops the rest, which is most
+							  of oc3d-core: the labeller and the batch scorers
+							  belong to 3D Objects Counter+, not here.
+
+							  NOTE: engines are looked up through EngineRegistry,
+							  which holds hard references to every engine class,
+							  so minimizeJar can see them. If an engine is ever
+							  registered reflectively this must be revisited —
+							  relocation rewrites bytecode, not strings.
+							-->
+							<minimizeJar>true</minimizeJar>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<licenseResolver>${project.baseUri}src/license</licenseResolver>
+					<roots>
+						<root>src/main</root>
+						<root>src/test</root>
+					</roots>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

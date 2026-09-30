@@ -1,0 +1,3 @@
+Image,Method,Source Channel,Target Channel,Pearson r,Pearson r Thresholded,Manders M1,Manders M2,Manders Valid?,Costes Ta,Costes Tb,Costes Threshold Fitted?,Costes p,Costes p Floor,Costes p At Floor?,Randomization Skipped?,Costes Block,Voxels Analyzed
+pair A,whole-image-intensity,A,B,0.4498846577243649,0.45784500016274104,0.9750695940136379,0.9798216652067471,1.0,100.0,110.0,0.0,0.009900990099009901,0.009900990099009901,1.0,0.0,5.0,1664.0
+pair A,whole-image-intensity,B,A,0.4498846577243649,0.2746507811916142,0.0830042899175707,0.12958107383350218,1.0,146.00000046938658,155.80111257962275,1.0,0.009900990099009901,0.009900990099009901,1.0,0.0,5.0,1664.0
