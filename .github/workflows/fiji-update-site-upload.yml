@@ -1,0 +1,216 @@
+name: Upload To Fiji Update Site
+
+# Uploads the published GitHub Release jar, unchanged, to the Fiji update
+# site. Nothing is rebuilt: the jar that goes to users is the one whose
+# SHA-256 is recorded below and on the Release page.
+#
+# The update-site name is set once, in IMAGEJ_UPDATE_SITE_NAME. Its URL and
+# the typed confirmation for a live upload ("UPLOAD <name>") are derived from
+# it, so renaming the site is a one-line change.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Simulate the updater upload without changing the update site"
+        required: true
+        type: boolean
+        default: true
+      clear_stale_lock:
+        description: "Delete db.xml.gz.lock before upload using the WebDAV credentials"
+        required: true
+        type: boolean
+        default: false
+      confirm_live_upload:
+        description: "Required when dry_run=false: type UPLOAD followed by the update-site name"
+        required: false
+        type: string
+        default: ""
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  upload:
+    name: Verify release and upload
+    runs-on: ubuntu-latest
+    environment: fiji-update-site
+
+    env:
+      IMAGEJ_UPDATE_SITE_NAME: "Object-Colocalization-Suite"
+      FIJI_DOWNLOAD_URL: "https://downloads.imagej.net/fiji/latest/fiji-latest-linux64-jdk.zip"
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: "v0.1.0"
+      RELEASE_COMMIT: "68dd89ecea725d85b130fe5df1455ea4e5cccbcb"
+      RELEASE_SHA256: "2EEE3EAAE6981CA6260DA4998FAEE22E069D0357BE0956CEF728D8DD6C179235"
+      RELEASE_JAR: "Object_Colocalization_Suite-0.1.0.jar"
+      IMAGEJ_UPLOAD_USER: ${{ secrets.IMAGEJ_UPLOAD_USER }}
+      IMAGEJ_UPLOAD_PASSWORD: ${{ secrets.IMAGEJ_UPLOAD_PASSWORD }}
+      INSTALL_DIR: "plugins"
+      REPLACE_GLOB: "plugins/Object_Colocalization_Suite-*.jar"
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+      CLEAR_STALE_LOCK: ${{ github.event_name == 'workflow_dispatch' && inputs.clear_stale_lock || 'false' }}
+      CONFIRM_LIVE_UPLOAD: ${{ inputs.confirm_live_upload }}
+
+    steps:
+      - name: Derive site URL and confirmation from the site name
+        shell: bash
+        run: |
+          test -n "$IMAGEJ_UPDATE_SITE_NAME"
+          echo "IMAGEJ_UPDATE_SITE_URL=https://sites.imagej.net/$IMAGEJ_UPDATE_SITE_NAME/" >> "$GITHUB_ENV"
+          echo "LIVE_UPLOAD_CONFIRMATION=UPLOAD $IMAGEJ_UPDATE_SITE_NAME" >> "$GITHUB_ENV"
+
+      - name: Require live upload confirmation
+        shell: bash
+        run: |
+          if [ "$DRY_RUN" != "true" ] && [ "$CONFIRM_LIVE_UPLOAD" != "$LIVE_UPLOAD_CONFIRMATION" ]; then
+            echo "Live update-site upload blocked. Re-run with confirm_live_upload set to: $LIVE_UPLOAD_CONFIRMATION"
+            exit 1
+          fi
+          echo "Mode: $([ "$DRY_RUN" = "true" ] && echo dry run || echo LIVE) to $IMAGEJ_UPDATE_SITE_URL"
+
+      - name: Validate secrets
+        shell: bash
+        run: |
+          test -n "$IMAGEJ_UPLOAD_USER" || { echo "Missing repository secret: IMAGEJ_UPLOAD_USER"; exit 1; }
+          test -n "$IMAGEJ_UPLOAD_PASSWORD" || { echo "Missing repository secret: IMAGEJ_UPLOAD_PASSWORD"; exit 1; }
+
+      - name: Download the GitHub Release jar
+        shell: bash
+        run: |
+          mkdir -p release-artifact
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" \
+            --pattern "$RELEASE_JAR" --dir release-artifact
+
+      - name: Verify the release jar
+        shell: bash
+        run: |
+          python3 - "release-artifact/$RELEASE_JAR" "$RELEASE_SHA256" "$RELEASE_COMMIT" <<'PY'
+          import hashlib
+          import sys
+          import zipfile
+          from pathlib import Path
+
+          path = Path(sys.argv[1])
+          expected_hash = sys.argv[2].upper()
+          expected_commit = sys.argv[3]
+          actual_hash = hashlib.sha256(path.read_bytes()).hexdigest().upper()
+          if actual_hash != expected_hash:
+              raise SystemExit(f"Release SHA-256 mismatch: {actual_hash}")
+
+          with zipfile.ZipFile(path) as archive:
+              entries = set(archive.namelist())
+              required = {
+                  "META-INF/MANIFEST.MF",
+                  "plugins.config",
+                  "Object_Colocalization_Suite.class",
+                  "OCS_Batch.class",
+                  "META-INF/licenses/JTS-LICENSE.txt",
+              }
+              missing = sorted(required - entries)
+              if missing:
+                  raise SystemExit(f"Release jar entries missing: {missing}")
+              for prefix, why in (("sc/fiji/", "unrelocated core classes"),
+                                  ("org/locationtech/", "unrelocated JTS classes"),
+                                  ("ij/", "bundled ImageJ classes")):
+                  if any(name.startswith(prefix) for name in entries):
+                      raise SystemExit(f"Release jar contains {why}")
+              manifest = archive.read("META-INF/MANIFEST.MF").decode("UTF-8")
+
+          if f"Implementation-Build: {expected_commit}\r\n" not in manifest:
+              raise SystemExit("Release jar was not built from the release commit")
+          if "\nClass-Path:" in manifest:
+              raise SystemExit("Release jar declares external class-path jars")
+          print(f"Release jar verified: {actual_hash}")
+          PY
+
+      - name: Download Fiji
+        shell: bash
+        run: |
+          curl -fsSL "$FIJI_DOWNLOAD_URL" -o fiji-linux64.zip
+          unzip -q fiji-linux64.zip
+          FIJI_DIR="$(find . -maxdepth 5 -type f \( -name "ImageJ*linux64*" -o -name "ImageJ2*linux64*" -o -name "fiji-linux-x64" \) -printf "%h\n" | head -n 1)"
+          if [ -z "$FIJI_DIR" ]; then
+            FIJI_DIR="$(find . -maxdepth 4 -type d -name "*.app" -print -quit)"
+          fi
+          if [ -z "$FIJI_DIR" ]; then
+            echo "Could not locate extracted Fiji/ImageJ directory."
+            unzip -Z1 fiji-linux64.zip | head -n 80
+            exit 1
+          fi
+          if [ "$FIJI_DIR" != "./Fiji.app" ]; then
+            mv "$FIJI_DIR" ./Fiji.app
+          fi
+          FIJI_LAUNCHER="$(find Fiji.app -maxdepth 2 -type f \( -name "ImageJ*linux64*" -o -name "ImageJ2*linux64*" -o -name "fiji-linux-x64" \) -print -quit)"
+          test -n "$FIJI_LAUNCHER" || { echo "Could not locate the Fiji Linux launcher."; exit 1; }
+          chmod +x "$FIJI_LAUNCHER"
+          echo "FIJI_LAUNCHER=$FIJI_LAUNCHER" >> "$GITHUB_ENV"
+
+      - name: Check or clear remote lock
+        shell: bash
+        run: |
+          lock_url="${IMAGEJ_UPDATE_SITE_URL%/}/db.xml.gz.lock"
+          status="$(curl -L -s -o /dev/null -w "%{http_code}" -I "$lock_url" || true)"
+          if [ "$status" = "404" ]; then
+            echo "No remote lock exists at $lock_url"
+            exit 0
+          fi
+          if [ "$status" != "200" ]; then
+            echo "Unexpected status for $lock_url: HTTP $status"
+            exit 1
+          fi
+          if [ "$CLEAR_STALE_LOCK" != "true" ]; then
+            echo "Remote lock exists at $lock_url. Rerun with clear_stale_lock=true only if you are sure no upload is active."
+            exit 1
+          fi
+          delete_status="$(curl -L -s -o /dev/null -w "%{http_code}" -u "$IMAGEJ_UPLOAD_USER:$IMAGEJ_UPLOAD_PASSWORD" -X DELETE "$lock_url" || true)"
+          if [ "$delete_status" != "200" ] && [ "$delete_status" != "204" ] && [ "$delete_status" != "404" ]; then
+            echo "Could not delete remote lock. HTTP $delete_status"
+            exit 1
+          fi
+          echo "Remote lock cleared or absent."
+
+      - name: Stage the jar into Fiji
+        shell: bash
+        run: |
+          mapfile -t old_files < <(compgen -G "Fiji.app/$REPLACE_GLOB" || true)
+          for old_file in "${old_files[@]}"; do
+            rm -f "$old_file"
+          done
+          mkdir -p "Fiji.app/$INSTALL_DIR"
+          cp "release-artifact/$RELEASE_JAR" "Fiji.app/$INSTALL_DIR/$RELEASE_JAR"
+          echo "RELATIVE_TARGET=$INSTALL_DIR/$RELEASE_JAR" >> "$GITHUB_ENV"
+
+      - name: Configure update site metadata
+        shell: bash
+        run: |
+          "$FIJI_LAUNCHER" --update edit-update-site "$IMAGEJ_UPDATE_SITE_NAME" "$IMAGEJ_UPDATE_SITE_URL" "webdav:$IMAGEJ_UPLOAD_USER:$IMAGEJ_UPLOAD_PASSWORD" .
+          "$FIJI_LAUNCHER" --update update
+
+      - name: Upload to Fiji update site
+        shell: bash
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            upload_args=(--update upload --simulate --update-site "$IMAGEJ_UPDATE_SITE_NAME" --force-shadow --forget-missing-dependencies "$RELATIVE_TARGET")
+            echo "Running simulated upload for $RELATIVE_TARGET"
+          else
+            upload_args=(--update upload --update-site "$IMAGEJ_UPDATE_SITE_NAME" --force-shadow --forget-missing-dependencies "$RELATIVE_TARGET")
+            echo "Uploading $RELATIVE_TARGET to $IMAGEJ_UPDATE_SITE_NAME"
+          fi
+          "$FIJI_LAUNCHER" "${upload_args[@]}"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "Dry run complete. No files were uploaded."
+          else
+            echo "Upload complete."
+          fi
+
+      - name: Archive the uploaded jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: object-colocalization-suite-uploaded-jar
+          path: release-artifact/${{ env.RELEASE_JAR }}
+          if-no-files-found: error

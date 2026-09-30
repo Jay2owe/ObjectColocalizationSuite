@@ -44,7 +44,7 @@ under their own package names, so both can be installed side by side.
 ## Quick start
 
 Open two or more label images (one object per label value), then
-`Plugins > Object Colocalization Suite`.
+`Plugins > Object Colocalization Suite > Object Colocalization Suite`.
 
 1. **Inputs.** Pick a label image per channel (channels 3 to 5 are optional),
    the matching raw intensity images if you want the intensity methods, a
@@ -58,8 +58,8 @@ Open two or more label images (one object per label value), then
    with each other, and check how much each setting matters.
 
 The results open as `OCS <table>` windows and, with an output folder, are
-saved with a run record that repeats the run. `Plugins > Batch (folder)`
-runs the same analysis over a folder of fields.
+saved with a run record that repeats the run.
+`Plugins > Object Colocalization Suite > Batch (folder)` runs the same analysis over a folder of fields.
 
 | Preset | Methods | Extra checks |
 |---|---|---|
@@ -215,7 +215,7 @@ the line for your own settings.
 
 ## Batch
 
-`Plugins > Batch (folder)` groups a folder's files into fields by a regular
+`Plugins > Object Colocalization Suite > Batch (folder)` groups a folder's files into fields by a regular
 expression, shows what will run, then analyses each field and saves as it
 goes. Escape stops it between or within fields; what finished is kept.
 
