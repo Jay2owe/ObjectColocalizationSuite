@@ -4,6 +4,8 @@ All notable changes to Object Colocalization Suite are recorded here. The
 format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 the version numbers follow the rules in `VERSIONING.md`.
 
+## [Unreleased]
+
 ## [0.1.0] - 2026-09-30
 
 First public release.
