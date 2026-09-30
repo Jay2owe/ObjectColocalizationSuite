@@ -14,7 +14,7 @@
 
 	<groupId>io.github.jay2owe</groupId>
 	<artifactId>Object_Colocalization_Suite</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2-SNAPSHOT</version>
 
 	<name>Object Colocalization Suite</name>
 	<description>Fiji plugin that runs thirteen colocalization methods (object overlap, intensity correlation, spatial statistics, territories) per object over the same label images, tests each against chance, compares them and classifies which are informative on the data.</description>
