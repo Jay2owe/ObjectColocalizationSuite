@@ -6,6 +6,49 @@ the version numbers follow the rules in `VERSIONING.md`.
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-30
+
+Faster, with every output unchanged byte for byte. No method, default,
+column or file changed; only the embedded measurement cores were updated.
+
+### Changed
+
+- Embedded cores updated to volcoloc-core 0.2.0 (label sizes and pair
+  overlaps counted in bulk instead of one hash-map lookup per voxel),
+  oc3d-core 0.2.1 (centroid scan without boxing each voxel's label) and
+  territories-core 0.2.2 (3D territories assigned tile by tile instead of one
+  nearest-object search per voxel). cpc-core 0.2.0 and opa-core 0.4.0 are
+  unchanged. Each core release keeps its predecessor as a reference in its
+  own tests and compares every output as raw bits.
+
+### Performance
+
+Measured end to end with `ocs.bench.ReleaseBenchmark` on the same compiled
+plugin, first on the 0.1.0 core versions and then on these (median of 3,
+16 logical processors on a machine already fully loaded by other work, so
+the one-processor runs are the steadier figure):
+
+| Case | Setting | 0.1.0 | 0.1.1 | Factor |
+|---|---|---|---|---|
+| A: Quick look + 200-shuffle chance test, 256 x 256 x 8 | default | 455 ms | 280 ms | 1.6x |
+| A | one processor | 3.4 s | 1.2 s | 2.8x |
+| B: six object methods + 50-shuffle chance test, 4 channels, 512 x 512 x 13 | default | 22.0 s | 7.5 s | 2.9x |
+| B | one processor | 49.9 s | 15.5 s | 3.2x |
+| D: territory occupancy in 3D | default | 1.55 s | 0.98 s | 1.6x |
+| D | one processor | 4.6 s | 1.3 s | 3.5x |
+
+CPU time for case B falls from 52 s to 22 s. Case C (whole-image
+intensity) does not use the updated cores and is unchanged.
+
+**Evidence that nothing moved:** `GoldenOutputTest` passes against the
+committed 0.1.0 goldens byte for byte, and each benchmark case's full output
+tree has the same SHA-256 as on 0.1.0 (A `5a737a18...`, B `1c0edfd1...`,
+C `cfafa57f...`, D `26957cdd...`).
+
+What remains in case B is mostly this plugin's own distance-tolerance search
+and the repeated per-method scans of the same label images; sharing one scan
+between methods needs a cache across engines and is left for a later version.
+
 ## [0.1.0] - 2026-09-30
 
 First public release.

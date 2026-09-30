@@ -14,7 +14,7 @@
 
 	<groupId>io.github.jay2owe</groupId>
 	<artifactId>Object_Colocalization_Suite</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 
 	<name>Object Colocalization Suite</name>
 	<description>Fiji plugin that runs thirteen colocalization methods (object overlap, intensity correlation, spatial statistics, territories) per object over the same label images, tests each against chance, compares them and classifies which are informative on the data.</description>
@@ -120,7 +120,7 @@
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>volcoloc-core</artifactId>
-			<version>0.1.0</version>
+			<version>0.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
@@ -135,14 +135,14 @@
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>territories-core</artifactId>
-			<version>0.2.1</version>
+			<version>0.2.2</version>
 		</dependency>
 
 		<!-- Shared chassis: ROI/label ingest, CSV, batch discovery, dialog widgets. -->
 		<dependency>
 			<groupId>io.github.jay2owe</groupId>
 			<artifactId>oc3d-core</artifactId>
-			<version>0.2.0</version>
+			<version>0.2.1</version>
 		</dependency>
 	</dependencies>
 

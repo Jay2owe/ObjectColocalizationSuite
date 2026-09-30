@@ -30,12 +30,12 @@ thresholding, MorphoLibJ, manual), in 2D or 3D.
    - URL: `https://sites.imagej.net/Object-Colocalization-Suite/`
 3. Close the list, **Apply changes** and restart Fiji.
 
-The update site goes live with the first upload of 0.1.0; until then use the
+The update site goes live with the first upload of 0.1.1; until then use the
 jar below.
 
 ### Manual
 
-Download `Object_Colocalization_Suite-0.1.0.jar` from
+Download `Object_Colocalization_Suite-0.1.1.jar` from
 [Releases](https://github.com/Jay2owe/ObjectColocalizationSuite/releases),
 put it in Fiji's `plugins/` folder and restart. It needs no other update
 site: the measurement cores it shares with its sibling plugins are bundled
@@ -307,13 +307,13 @@ hand-computed reference dataset in the test suite.
 Please cite this plugin and the sibling plugin whose measure you report
 (see `CITATION.cff`):
 
-> Malcolm, J. (2026). Object Colocalization Suite (v0.1.0) [Software].
+> Malcolm, J. (2026). Object Colocalization Suite (v0.1.1) [Software].
 > https://github.com/Jay2owe/ObjectColocalizationSuite
 
 Methods-section form:
 
 > Colocalization was quantified per object with Object Colocalization Suite
-> (v0.1.0) for Fiji, using volumetric overlap as in Volumetric Colocalization
+> (v0.1.1) for Fiji, using volumetric overlap as in Volumetric Colocalization
 > (v0.1.0); each method was tested against chance with 1,000 whole-channel
 > displacements within the region of interest (seed 20260812), reporting raw
 > two-sided permutation p values.

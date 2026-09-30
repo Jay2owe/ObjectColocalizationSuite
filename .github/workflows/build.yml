@@ -8,13 +8,15 @@ on:
 # They are not published to any Maven repository, so a clean runner builds them
 # from source first. Keep each immutable tag aligned with the matching core
 # <version> in pom.xml. cpc-core depends on oc3d-core, so oc3d-core installs
-# first.
+# first. cpc-core 0.2.0 names oc3d-core 0.2.0 in its own pom, so that version is
+# installed as well; the plugin's direct pin (0.2.1) is the one it embeds.
 env:
-  OC3D_CORE_REF: v0.2.0
+  OC3D_CORE_REF: v0.2.1
+  OC3D_CORE_FOR_CPC_REF: v0.2.0
   CPC_CORE_REF: v0.2.0
-  VOLCOLOC_CORE_REF: v0.1.0
+  VOLCOLOC_CORE_REF: v0.2.0
   OPA_CORE_REF: v0.4.0
-  TERRITORIES_CORE_REF: v0.2.1
+  TERRITORIES_CORE_REF: v0.2.2
 
 jobs:
   test:
@@ -31,6 +33,13 @@ jobs:
           repository: Jay2owe/oc3d-core
           ref: ${{ env.OC3D_CORE_REF }}
           path: oc3d-core
+
+      - name: Check out the oc3d-core that cpc-core names
+        uses: actions/checkout@v4
+        with:
+          repository: Jay2owe/oc3d-core
+          ref: ${{ env.OC3D_CORE_FOR_CPC_REF }}
+          path: oc3d-core-for-cpc
 
       - name: Check out cpc-core
         uses: actions/checkout@v4
@@ -72,7 +81,7 @@ jobs:
       # CI at the tag, and this job is about the plugin.
       - name: Install the cores
         run: |
-          for core in oc3d-core cpc-core volcoloc-core opa-core territories-core; do
+          for core in oc3d-core-for-cpc oc3d-core cpc-core volcoloc-core opa-core territories-core; do
             mvn --batch-mode --no-transfer-progress -f "$core/pom.xml" -DskipTests clean install
           done
 

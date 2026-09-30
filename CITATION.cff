@@ -20,7 +20,7 @@ authors:
 repository-code: "https://github.com/Jay2owe/ObjectColocalizationSuite"
 url: "https://github.com/Jay2owe/ObjectColocalizationSuite"
 license: BSD-3-Clause
-version: "0.1.0"
+version: "0.1.1"
 date-released: "2026-09-30"
 keywords:
   - imagej
@@ -75,7 +75,7 @@ references:
     authors:
       - given-names: Jamie
         family-names: Malcolm
-    version: "0.1.0"
+    version: "0.2.0"
     repository-code: "https://github.com/Jay2owe/volcoloc-core"
   - type: software
     title: "opa-core: Embeddable object proximity and spatial point-pattern engine"
@@ -89,12 +89,12 @@ references:
     authors:
       - given-names: Jamie
         family-names: Malcolm
-    version: "0.2.1"
+    version: "0.2.2"
     repository-code: "https://github.com/Jay2owe/territories-core"
   - type: software
     title: "oc3d-core: Shared engine for the 3D Objects Counter plugin family"
     authors:
       - given-names: Jamie
         family-names: Malcolm
-    version: "0.2.0"
+    version: "0.2.1"
     repository-code: "https://github.com/Jay2owe/oc3d-core"
