@@ -44,10 +44,10 @@ jobs:
       IMAGEJ_UPDATE_SITE_NAME: "Object-Colocalization-Suite"
       FIJI_DOWNLOAD_URL: "https://downloads.imagej.net/fiji/latest/fiji-latest-linux64-jdk.zip"
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: "v0.1.0"
-      RELEASE_COMMIT: "68dd89ecea725d85b130fe5df1455ea4e5cccbcb"
-      RELEASE_SHA256: "2EEE3EAAE6981CA6260DA4998FAEE22E069D0357BE0956CEF728D8DD6C179235"
-      RELEASE_JAR: "Object_Colocalization_Suite-0.1.0.jar"
+      RELEASE_TAG: "v0.1.1"
+      RELEASE_COMMIT: "0762eb151b32b21df6166cb96db06d89e9dbeba2"
+      RELEASE_SHA256: "D965965D0737AA43C55DDE188C09733E3784E0CB2FB23BDCF24F7732D6E08095"
+      RELEASE_JAR: "Object_Colocalization_Suite-0.1.1.jar"
       IMAGEJ_UPLOAD_USER: ${{ secrets.IMAGEJ_UPLOAD_USER }}
       IMAGEJ_UPLOAD_PASSWORD: ${{ secrets.IMAGEJ_UPLOAD_PASSWORD }}
       INSTALL_DIR: "plugins"
